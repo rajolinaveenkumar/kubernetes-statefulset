@@ -54,7 +54,7 @@ spec:
 
   volumeClaimTemplates:  # This is equal to pvc
   - metadata:
-    name: mysql-pvc
+      name: mysql-pvc
     
     spec:
       accessModes: [ "ReadWriteOnce" ]
