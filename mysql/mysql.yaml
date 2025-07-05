@@ -21,7 +21,7 @@ spec:
 apiVersion: v1 
 kind: Service
 metadata:
-  name: clusterIp-service
+  name: clusterip-service
   namespace: k8-expense
   labels:
     component: mysql
@@ -54,7 +54,8 @@ spec:
 
   volumeClaimTemplates:  # This is equal to pvc
   - metadata:
-    name: mysql-pvc 
+    name: mysql-pvc
+    namespace: k8-expense
     spec:
       accessModes:
         - ReadWriteOnce
