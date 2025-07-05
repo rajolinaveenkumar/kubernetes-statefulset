@@ -55,10 +55,9 @@ spec:
   volumeClaimTemplates:  # This is equal to pvc
   - metadata:
     name: mysql-pvc
-    namespace: k8-expense
+    
     spec:
-      accessModes:
-        - ReadWriteOnce
+      accessModes: [ "ReadWriteOnce" ]
       storageClassName: mysql-sc
       resources:
         requests:
