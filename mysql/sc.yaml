@@ -2,6 +2,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:   
   name: mysql-sc
+  namespace: k8-expense
 provisioner: ebs.csi.aws.com
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer
