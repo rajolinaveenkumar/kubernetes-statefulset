@@ -11,8 +11,8 @@ spec:
   selector:
     component: mysql
     tier: database
-  clusterIp: None  # Makes the service headless
-  port:
+  clusterIP: None  # Makes the service headless
+  ports:
   - protocol: TCP
     port: 3306
     targetPort: 3306
@@ -30,7 +30,7 @@ spec:
   selector:
     component: mysql
     tier: database
-  port:
+  ports:
   - protocol: TCP
     port: 3306
     targetPort: 3306
@@ -52,7 +52,7 @@ spec:
   replicas: 2
   minReadySeconds: 10  # by default is 0
 
-  volumeClaimTemplate:  # This is equal to pvc
+  volumeClaimTemplates:  # This is equal to pvc
   - metadata:
     name: mysql-pvc 
     spec:
