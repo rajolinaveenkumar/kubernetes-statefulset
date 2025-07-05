@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: frontend
+  namespace: k8-expense
+  labels:
+    app: frontend
+    tier: web
+    project: expense
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+      tier: web
+      project: expense
+  template:
+    metadata:
+      labels:
+        app: frontend
+        tier: web
+        project: expense
+    spec:
+      volumes:
+      - name: nginx
+        configMap:
+          name: nginxconfigmap
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+      containers:
+      - name: frontend
+        image: naveenrajoli/frontend:1.2
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: nginx
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  namespace: k8-expense
+spec:
+  type: LoadBalancer
+  selector: 
+    app: frontend
+    tier: web
+    project: expense
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
