@@ -1,0 +1,82 @@
+apiVersion: v1 
+kind: Service
+metadata:
+  name: headleaas-service
+  namespace: k8-expense
+  labels:
+    project: expense
+    component: mysql
+    tier: database
+spec:
+  selector:
+    component: mysql
+    tier: database
+  clusterIp: None  # Makes the service headless
+  port:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+
+apiVersion: v1 
+kind: Service
+metadata:
+  name: clusterIp-service
+  namespace: k8-expense
+  labels:
+    component: mysql
+    tier: database
+spec:
+  selector:
+    component: mysql
+    tier: database
+  port:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:  
+  name: mysql-state
+  namespace: k8-expense
+spec:
+  selector:
+    matchLabels:
+      component: mysql
+      tier: database
+  serviceName: "headleaas-service"
+  replicas: 2
+  minReadySeconds: 10  # by default is 0
+
+  volumeClaimTemplate:  # This is equal to pvc
+  - metadata:
+    name: mysql-pvc 
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: mysql-sc
+      resources:
+        requests:
+          storage: 5Gi
+    
+  template:
+    metadata:
+      labels:
+        component: mysql
+        tier: database
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: naveenrajoli/2025mysql:1.0.0 
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-pvc 
+          mountPath: /var/lib/mysql
+
+
